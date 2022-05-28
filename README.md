@@ -1,4 +1,4 @@
-# Python-small-school-project GUI tkinter applikacija
+# Python-small-school-project GUI tkinter aplikacija
 Implementira:
 • lista
 • rečnik 
