@@ -7,7 +7,7 @@ Implementira:
 • mapa 
 • filter 
 • redukcija 
-•  ymysql
+• pymysql
 • datum
 • vreme
 • klasa
