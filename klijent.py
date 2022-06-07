@@ -46,7 +46,7 @@ for i in range (len(vrsteGoriva)):
 
 button = Button(tk, text="Send", width=100, command=sendSrv).pack()
 
-ta = Text(tk, width=40, font=f)
+ta = Text(tk, width=400, font=f)
 ta.pack()
 
 tk.mainloop()

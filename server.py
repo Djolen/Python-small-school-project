@@ -59,12 +59,13 @@ def srvThread():
     s.bind(("localhost", 12345))
     s.listen()
     while True:
+        porServera = ""
         conn, add=s.accept()
-        str=conn.recv(1024).decode()
-        poruke = str.split(":")
+        strn=conn.recv(1024).decode()
+        poruke = strn.split(":")
         snagaKw = float(poruke[2])
 
-        ta.insert("0.0", str+'\n')
+        ta.insert("0.0", strn+'\n')
         ta.insert("0.0", "SERVER: waiting...\n")
         #print(poruke)
         snaga = kw2hp(snagaKw)
@@ -81,15 +82,29 @@ def srvThread():
 
         automobiliZaPocetnike = filter(bezbedniAutomobili,automobili)
         print("Od unetih automobila pocetnici smeju da voze: ")
+        porServera += "Od unetih automobila pocetnici smeju da voze: "
         for x in automobiliZaPocetnike:
             print(x)
+            porServera += str(x) + " "
+        porServera += "\n"
 
-        print("A od svih unetih automobila najveca snaga : ", end="")
-        print(functools.reduce(lambda a, b: a if a > b else b, snage))
 
-        print("Svi modeli koji su uneti")
-        sviModeli = list(map(mapiranje, automobili))
-        print(list(sviModeli))
+        porServera += ",a od svih unetih automobila najveca snaga : "
+        #print("A od svih unetih automobila najveca snaga : ", end="")
+        #print(functools.reduce(lambda a, b: a if a > b else b, snage))
+        najSnagaAuto = functools.reduce(lambda a, b: a if a > b else b, snage)
+        #print(najSnagaAuto)
+        porServera += str(najSnagaAuto)
+        porServera += "\n"
+
+
+
+        porServera += " ,svi modeli koji su uneti: "
+        #print("Svi modeli koji su uneti")
+        porServera += str(list(map(mapiranje, automobili)))
+        porServera += "\n"
+        #sviModeli = list(map(mapiranje, automobili))
+        #print(list(sviModeli))
 
         sql = "INSERT INTO AUTOMOBILI(MODEL, \
                PROIZVODJAC, SNAGA, GORIVO) \
@@ -101,12 +116,12 @@ def srvThread():
         except:
             db.rollback()
 
-        sret="Vreme primanja poruke je "
-        sret+=time.ctime()
-        sret+="\n"
-        ta.insert("0.0", sret)
+        vr="Vreme primanja poruke je "
+        vr+=time.ctime()
+        vr+="\n"
+        ta.insert("0.0", vr)
 
-        conn.sendall(sret.encode())
+        conn.sendall(porServera.encode())
         conn.close()
 
 
@@ -114,7 +129,7 @@ tk = Tk()
 
 tk.geometry("500x500")
 
-ta=Text(tk, width=100, height=30, font=("Arial", 13))
+ta=Text(tk, width=400, height=30, font=("Arial", 13))
 ta.pack()
 ta.insert("0.0", "SERVER: waiting...\n")
 t1=threading.Thread(target=srvThread)
